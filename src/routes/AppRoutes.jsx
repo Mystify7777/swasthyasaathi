@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Login from "../pages/Login";
 import Dashboard from "../pages/Dashboard";
 import NotFound from "../pages/NotFound";
+import Patients from "../pages/Patients";
 
 import ProtectedRoute from "./ProtectedRoute";
 
@@ -24,6 +25,14 @@ export default function AppRoutes() {
             </ProtectedRoute>
           }
         />
+        <Route
+  path="/patients"
+  element={
+    <ProtectedRoute>
+      <Patients />
+    </ProtectedRoute>
+  }
+/>
 
         <Route path="*" element={<NotFound />} />
 

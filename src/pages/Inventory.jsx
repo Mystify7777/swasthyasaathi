@@ -15,6 +15,7 @@ export default function Inventory() {
 
   const {
     medicines,
+    loading,
     refreshMedicines,
   } = useData();
 
@@ -145,6 +146,7 @@ export default function Inventory() {
 
           <MedicineList
             medicines={filteredMedicines}
+            loading={loading}
             onDelete={handleDelete}
             onEdit={handleEdit}
           />

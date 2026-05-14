@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 
 import { useData } from "../context/DataContext";
 import Navbar from "../components/common/Navbar";
+import DashboardSkeleton from "../components/skeletons/DashboardSkeleton";
 
 export default function Dashboard() {
 
@@ -88,29 +89,37 @@ export default function Dashboard() {
           Dashboard
         </h2>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {loading ? (
 
-          {cards.map((card) => (
+          <DashboardSkeleton />
 
-            <div
-              key={card.title}
-              onClick={() => navigate(card.path)}
-              className={`${card.color} text-white p-6 rounded-2xl shadow-md cursor-pointer hover:scale-105 transition`}
-            >
+        ) : (
 
-              <h3 className="text-lg font-semibold">
-                {card.title}
-              </h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
 
-              <p className="text-4xl font-bold mt-4">
-                {loading ? "..." : card.value}
-              </p>
+            {cards.map((card) => (
 
-            </div>
+              <div
+                key={card.title}
+                onClick={() => navigate(card.path)}
+                className={`${card.color} text-white p-6 rounded-2xl shadow-md cursor-pointer hover:scale-105 transition`}
+              >
 
-          ))}
+                <h3 className="text-lg font-semibold">
+                  {card.title}
+                </h3>
 
-        </div>
+                <p className="text-4xl font-bold mt-4">
+                  {card.value}
+                </p>
+
+              </div>
+
+            ))}
+
+          </div>
+
+        )}
 
       </main>
 

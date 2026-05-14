@@ -1,12 +1,28 @@
 import MedicineCard from "./MedicineCard";
+import CardSkeleton from "../skeletons/CardSkeleton";
 
 export default function MedicineList({
 
   medicines,
+  loading,
   onDelete,
   onEdit,
 
 }) {
+
+  if (loading) {
+
+    return (
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+        {[1,2,3,4].map((item) => (
+          <CardSkeleton key={item} />
+        ))}
+
+      </div>
+    );
+  }
 
   if (medicines.length === 0) {
 

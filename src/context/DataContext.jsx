@@ -17,6 +17,8 @@ import {
   getMedicines,
 } from "../services/inventoryService";
 
+import AppLoader from "../components/common/AppLoader";
+
 const DataContext = createContext();
 
 export const DataProvider = ({
@@ -111,6 +113,10 @@ export const DataProvider = ({
     }
 
   }, [user]);
+
+  if (loading) {
+    return <AppLoader />;
+  }
 
   return (
 

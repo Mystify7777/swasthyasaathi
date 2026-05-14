@@ -15,6 +15,7 @@ export default function Patients() {
 
   const {
     patients,
+    loading,
     refreshPatients,
   } = useData();
 
@@ -102,6 +103,7 @@ export default function Patients() {
 
           <PatientList
             patients={filteredPatients}
+            loading={loading}
             onDelete={handleDelete}
             onEdit={handleEdit}
           />

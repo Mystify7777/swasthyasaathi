@@ -1,51 +1,27 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import toast, { Toaster } from "react-hot-toast";
 
-import { useAuth } from "../context/AuthContext";
+import { useData } from "../context/DataContext";
 import PatientForm from "../components/patients/PatientForm";
 import PatientList from "../components/patients/PatientList";
 import Navbar from "../components/common/Navbar";
 
 import {
-  getPatients,
   deletePatient,
 } from "../services/patientService";
 
 export default function Patients() {
 
-  const { user } = useAuth();
-
-  const [patients, setPatients] = useState([]);
+  const {
+    patients,
+    refreshPatients,
+  } = useData();
 
   const [search, setSearch] = useState("");
 
   const [editingPatient, setEditingPatient] =
     useState(null);
-
-  const fetchPatients = async () => {
-
-    if (!user) return;
-
-    try {
-
-      const data = await getPatients(user.uid);
-
-      setPatients(data);
-
-    } catch (error) {
-
-      console.error(error);
-
-      toast.error("Failed to fetch patients");
-    }
-  };
-
-  useEffect(() => {
-
-    fetchPatients();
-
-  }, [user]);
 
   const handleDelete = async (id) => {
 
@@ -61,7 +37,7 @@ export default function Patients() {
 
       toast.success("Patient deleted");
 
-      fetchPatients();
+      refreshPatients();
 
     } catch (error) {
 
@@ -119,7 +95,7 @@ export default function Patients() {
           </div>
 
           <PatientForm
-            refreshPatients={fetchPatients}
+            refreshPatients={refreshPatients}
             editingPatient={editingPatient}
             clearEdit={clearEdit}
           />

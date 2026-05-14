@@ -1,52 +1,27 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import toast, { Toaster } from "react-hot-toast";
 
-import { useAuth } from "../context/AuthContext";
+import { useData } from "../context/DataContext";
 import Navbar from "../components/common/Navbar";
 import MedicineForm from "../components/inventory/MedicineForm";
 import MedicineList from "../components/inventory/MedicineList";
 
 import {
-  getMedicines,
   deleteMedicine,
 } from "../services/inventoryService";
 
 export default function Inventory() {
 
-  const { user } = useAuth();
-
-  const [medicines, setMedicines] =
-    useState([]);
+  const {
+    medicines,
+    refreshMedicines,
+  } = useData();
 
   const [editingMedicine, setEditingMedicine] =
     useState(null);
 
   const [search, setSearch] = useState("");
-
-  const fetchMedicines = async () => {
-
-    if (!user) return;
-
-    try {
-
-      const data = await getMedicines(user.uid);
-
-      setMedicines(data);
-
-    } catch (error) {
-
-      console.error(error);
-
-      toast.error("Failed to fetch medicines");
-    }
-  };
-
-  useEffect(() => {
-
-    fetchMedicines();
-
-  }, [user]);
 
   const handleDelete = async (id) => {
 
@@ -62,7 +37,7 @@ export default function Inventory() {
 
       toast.success("Medicine deleted");
 
-      fetchMedicines();
+      refreshMedicines();
 
     } catch (error) {
 
@@ -163,7 +138,7 @@ export default function Inventory() {
           </div>
 
           <MedicineForm
-            refreshMedicines={fetchMedicines}
+            refreshMedicines={refreshMedicines}
             editingMedicine={editingMedicine}
             clearEdit={clearEdit}
           />

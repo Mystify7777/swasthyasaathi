@@ -1,82 +1,53 @@
-import { useEffect, useState } from "react";
-
 import { useNavigate } from "react-router-dom";
 
-import { useAuth } from "../context/AuthContext";
-
-import { getPatients } from "../services/patientService";
-import { getMedicines } from "../services/inventoryService";
+import { useData } from "../context/DataContext";
 import Navbar from "../components/common/Navbar";
 
 export default function Dashboard() {
 
-  const { user } = useAuth();
+  const {
+    patients,
+    medicines,
+    loading,
+  } = useData();
 
   const navigate = useNavigate();
 
-  const [stats, setStats] = useState({
-    patients: 0,
-    dueVaccinations: 0,
-    overdueVaccinations: 0,
-    lowStockMedicines: 0,
+  const today = new Date();
+
+  const dueVaccinations = patients.filter((p) => {
+
+    if (!p.nextVaccinationDate) return false;
+
+    return (
+      new Date(
+        p.nextVaccinationDate
+      ).toDateString() ===
+      today.toDateString()
+    );
   });
 
-  useEffect(() => {
+  const overdueVaccinations = patients.filter((p) => {
 
-    const loadStats = async () => {
+    if (!p.nextVaccinationDate) return false;
 
-      const patients = await getPatients(user.uid);
+    return (
+      new Date(
+        p.nextVaccinationDate
+      ) < today
+    );
+  });
 
-      const medicines = await getMedicines(user.uid);
+  const lowStockMedicines = medicines.filter(
+    (m) => Number(m.quantity) < 10
+  );
 
-      const today = new Date();
-
-      const dueVaccinations = patients.filter((p) => {
-
-        if (!p.nextVaccinationDate) return false;
-
-        return (
-          new Date(
-            p.nextVaccinationDate
-          ).toDateString() ===
-          today.toDateString()
-        );
-      });
-
-      const overdueVaccinations =
-        patients.filter((p) => {
-
-          if (!p.nextVaccinationDate)
-            return false;
-
-          return (
-            new Date(
-              p.nextVaccinationDate
-            ) < today
-          );
-        });
-
-      const lowStockMedicines =
-        medicines.filter(
-          (m) => Number(m.quantity) < 10
-        );
-
-      setStats({
-        patients: patients.length,
-        dueVaccinations:
-          dueVaccinations.length,
-        overdueVaccinations:
-          overdueVaccinations.length,
-        lowStockMedicines:
-          lowStockMedicines.length,
-      });
-    };
-
-    if (user) {
-      loadStats();
-    }
-
-  }, [user]);
+  const stats = {
+    patients: patients.length,
+    dueVaccinations: dueVaccinations.length,
+    overdueVaccinations: overdueVaccinations.length,
+    lowStockMedicines: lowStockMedicines.length,
+  };
 
   const cards = [
     {
@@ -132,7 +103,7 @@ export default function Dashboard() {
               </h3>
 
               <p className="text-4xl font-bold mt-4">
-                {card.value}
+                {loading ? "..." : card.value}
               </p>
 
             </div>

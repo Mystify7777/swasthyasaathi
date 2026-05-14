@@ -1,3 +1,5 @@
+import { useEffect } from "react";
+
 import { useNavigate } from "react-router-dom";
 
 import { useData } from "../context/DataContext";
@@ -9,10 +11,29 @@ export default function Dashboard() {
   const {
     patients,
     medicines,
+    refreshPatients,
+    refreshMedicines,
     loading,
   } = useData();
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+
+    if (patients.length === 0) {
+      refreshPatients();
+    }
+
+    if (medicines.length === 0) {
+      refreshMedicines();
+    }
+
+  }, [
+    patients.length,
+    medicines.length,
+    refreshPatients,
+    refreshMedicines,
+  ]);
 
   const today = new Date();
 

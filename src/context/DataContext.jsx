@@ -17,8 +17,6 @@ import {
   getMedicines,
 } from "../services/inventoryService";
 
-import AppLoader from "../components/common/AppLoader";
-
 const DataContext = createContext();
 
 export const DataProvider = ({
@@ -33,7 +31,7 @@ export const DataProvider = ({
   const [medicines, setMedicines] =
     useState([]);
 
-  const [loading, setLoading] =
+  const [initialLoading, setInitialLoading] =
     useState(true);
 
   const refreshPatients =
@@ -84,7 +82,7 @@ export const DataProvider = ({
 
     try {
 
-      setLoading(true);
+      setInitialLoading(true);
 
       await Promise.all([
         refreshPatients(),
@@ -93,7 +91,7 @@ export const DataProvider = ({
 
     } finally {
 
-      setLoading(false);
+      setInitialLoading(false);
     }
   };
 
@@ -101,7 +99,7 @@ export const DataProvider = ({
 
     if (user) {
 
-      refreshAll();
+      setInitialLoading(false);
 
     } else {
 
@@ -109,14 +107,10 @@ export const DataProvider = ({
 
       setMedicines([]);
 
-      setLoading(false);
+      setInitialLoading(false);
     }
 
   }, [user]);
-
-  if (loading) {
-    return <AppLoader />;
-  }
 
   return (
 
@@ -126,7 +120,7 @@ export const DataProvider = ({
         patients,
         medicines,
 
-        loading,
+          loading: initialLoading,
 
         refreshPatients,
         refreshMedicines,

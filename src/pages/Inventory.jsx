@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import toast, { Toaster } from "react-hot-toast";
 
@@ -23,6 +23,14 @@ export default function Inventory() {
     useState(null);
 
   const [search, setSearch] = useState("");
+
+  useEffect(() => {
+
+    if (medicines.length === 0) {
+      refreshMedicines();
+    }
+
+  }, []);
 
   const handleDelete = async (id) => {
 

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import toast, { Toaster } from "react-hot-toast";
 
@@ -23,6 +23,14 @@ export default function Patients() {
 
   const [editingPatient, setEditingPatient] =
     useState(null);
+
+  useEffect(() => {
+
+    if (patients.length === 0) {
+      refreshPatients();
+    }
+
+  }, []);
 
   const handleDelete = async (id) => {
 

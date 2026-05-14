@@ -5,6 +5,11 @@ import { useNavigate } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
 
 import {
+  Eye,
+  EyeOff,
+} from "lucide-react";
+
+import {
   loginUser,
   registerUser,
   resetPassword,
@@ -25,6 +30,14 @@ export default function Login() {
   const [confirmPassword,
     setConfirmPassword] =
     useState("");
+
+  const [showPassword,
+    setShowPassword] =
+    useState(false);
+
+  const [showConfirmPassword,
+    setShowConfirmPassword] =
+    useState(false);
 
   const [loading, setLoading] =
     useState(false);
@@ -162,16 +175,42 @@ export default function Login() {
                 Password
               </label>
 
-              <input
-                type="password"
-                value={password}
-                onChange={(e) =>
-                  setPassword(e.target.value)
-                }
-                required
-                minLength={6}
-                className="w-full border border-gray-300 rounded-lg px-4 py-3"
-              />
+              <div className="relative">
+
+                <input
+                  type={
+                    showPassword
+                      ? "text"
+                      : "password"
+                  }
+                  value={password}
+                  onChange={(e) =>
+                    setPassword(e.target.value)
+                  }
+                  required
+                  minLength={6}
+                  className="w-full border border-gray-300 rounded-lg px-4 py-3 pr-12"
+                />
+
+                <button
+                  type="button"
+                  onClick={() =>
+                    setShowPassword(
+                      !showPassword
+                    )
+                  }
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500"
+                >
+
+                  {showPassword ? (
+                    <EyeOff size={20} />
+                  ) : (
+                    <Eye size={20} />
+                  )}
+
+                </button>
+
+              </div>
 
             </div>
 
@@ -183,8 +222,14 @@ export default function Login() {
                   Confirm Password
                 </label>
 
+                <div className="relative">
+
                 <input
-                  type="password"
+                  type={
+                    showConfirmPassword
+                      ? "text"
+                      : "password"
+                  }
                   value={confirmPassword}
                   onChange={(e) =>
                     setConfirmPassword(
@@ -193,8 +238,28 @@ export default function Login() {
                   }
                   required
                   minLength={6}
-                  className="w-full border border-gray-300 rounded-lg px-4 py-3"
+                  className="w-full border border-gray-300 rounded-lg px-4 py-3 pr-12"
                 />
+
+                <button
+                  type="button"
+                  onClick={() =>
+                    setShowConfirmPassword(
+                      !showConfirmPassword
+                    )
+                  }
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500"
+                >
+
+                  {showConfirmPassword ? (
+                    <EyeOff size={20} />
+                  ) : (
+                    <Eye size={20} />
+                  )}
+
+                </button>
+
+                </div>
 
               </div>
 

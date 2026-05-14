@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { useNavigate } from "react-router-dom";
 
@@ -41,6 +41,14 @@ export default function Login() {
 
   const [loading, setLoading] =
     useState(false);
+
+  const [resetLoading,
+    setResetLoading] =
+    useState(false);
+
+  const [cooldown,
+    setCooldown] =
+    useState(0);
 
   const handleSubmit = async (e) => {
 
@@ -111,7 +119,18 @@ export default function Login() {
         return;
       }
 
+      if (cooldown > 0) {
+
+        toast.error(
+          `Wait ${cooldown}s before retrying`
+        );
+
+        return;
+      }
+
       try {
+
+        setResetLoading(true);
 
         await resetPassword(email);
 
@@ -119,11 +138,33 @@ export default function Login() {
           "Password reset email sent"
         );
 
+        setCooldown(30);
+
       } catch (error) {
 
+        console.error(error);
+
         toast.error(error.message);
+
+      } finally {
+
+        setResetLoading(false);
       }
     };
+
+  useEffect(() => {
+
+    if (cooldown <= 0) return;
+
+    const timer = setInterval(() => {
+
+      setCooldown((prev) => prev - 1);
+
+    }, 1000);
+
+    return () => clearInterval(timer);
+
+  }, [cooldown]);
 
   return (
 
@@ -270,9 +311,23 @@ export default function Login() {
               <button
                 type="button"
                 onClick={handleForgotPassword}
-                className="text-sm text-blue-700 hover:underline"
+                disabled={
+                  resetLoading ||
+                  cooldown > 0
+                }
+                className={`text-sm ${
+                  resetLoading || cooldown > 0
+                    ? "text-gray-400 cursor-not-allowed"
+                    : "text-blue-700 hover:underline"
+                }`}
               >
-                Forgot Password?
+
+                {resetLoading
+                  ? "Sending..."
+                  : cooldown > 0
+                  ? `Retry in ${cooldown}s`
+                  : "Forgot Password?"}
+
               </button>
 
             </div>

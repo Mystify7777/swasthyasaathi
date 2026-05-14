@@ -1,13 +1,35 @@
+import {
+  lazy,
+  Suspense,
+} from "react";
+
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
-import Login from "../pages/Login";
-import Dashboard from "../pages/Dashboard";
-import NotFound from "../pages/NotFound";
-import Patients from "../pages/Patients";
-import Reminders from "../pages/Reminders";
-import Inventory from "../pages/Inventory";
+import AppLoader from "../components/common/AppLoader";
+
+const Dashboard = lazy(() =>
+  import("../pages/Dashboard")
+);
+
+const Patients = lazy(() =>
+  import("../pages/Patients")
+);
+
+const Reminders = lazy(() =>
+  import("../pages/Reminders")
+);
+
+const Inventory = lazy(() =>
+  import("../pages/Inventory")
+);
+
+const Login = lazy(() =>
+  import("../pages/Login")
+);
 
 import ProtectedRoute from "./ProtectedRoute";
+
+import NotFound from "../pages/NotFound";
 
 export default function AppRoutes() {
 
@@ -15,48 +37,53 @@ export default function AppRoutes() {
 
     <BrowserRouter>
 
-      <Routes>
+      <Suspense fallback={<AppLoader />}>
 
-        <Route path="/" element={<Login />} />
+        <Routes>
 
-        <Route
-          path="/dashboard"
-          element={
-            <ProtectedRoute>
-              <Dashboard />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-  path="/patients"
-  element={
-    <ProtectedRoute>
-      <Patients />
-    </ProtectedRoute>
-  }
-/>
+          <Route path="/" element={<Login />} />
 
-                <Route
-          path="/reminders"
-          element={
-            <ProtectedRoute>
-              <Reminders />
-            </ProtectedRoute>
-          }
-        />
+          <Route
+            path="/dashboard"
+            element={
+              <ProtectedRoute>
+                <Dashboard />
+              </ProtectedRoute>
+            }
+          />
 
-        <Route path="*" element={<NotFound />} />
+          <Route
+            path="/patients"
+            element={
+              <ProtectedRoute>
+                <Patients />
+              </ProtectedRoute>
+            }
+          />
 
-        <Route
-  path="/inventory"
-  element={
-    <ProtectedRoute>
-      <Inventory />
-    </ProtectedRoute>
-  }
-/>
+          <Route
+            path="/reminders"
+            element={
+              <ProtectedRoute>
+                <Reminders />
+              </ProtectedRoute>
+            }
+          />
 
-      </Routes>
+          <Route
+            path="/inventory"
+            element={
+              <ProtectedRoute>
+                <Inventory />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route path="*" element={<NotFound />} />
+
+        </Routes>
+
+      </Suspense>
 
     </BrowserRouter>
   );

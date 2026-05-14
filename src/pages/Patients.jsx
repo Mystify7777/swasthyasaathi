@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 
 import toast, { Toaster } from "react-hot-toast";
 
+import { useAuth } from "../context/AuthContext";
 import PatientForm from "../components/patients/PatientForm";
 import PatientList from "../components/patients/PatientList";
 import Navbar from "../components/common/Navbar";
@@ -13,6 +14,8 @@ import {
 
 export default function Patients() {
 
+  const { user } = useAuth();
+
   const [patients, setPatients] = useState([]);
 
   const [search, setSearch] = useState("");
@@ -22,9 +25,11 @@ export default function Patients() {
 
   const fetchPatients = async () => {
 
+    if (!user) return;
+
     try {
 
-      const data = await getPatients();
+      const data = await getPatients(user.uid);
 
       setPatients(data);
 
@@ -40,7 +45,7 @@ export default function Patients() {
 
     fetchPatients();
 
-  }, []);
+  }, [user]);
 
   const handleDelete = async (id) => {
 

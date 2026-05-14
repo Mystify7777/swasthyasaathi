@@ -2,18 +2,23 @@ import { useEffect, useState } from "react";
 
 import toast, { Toaster } from "react-hot-toast";
 
+import { useAuth } from "../context/AuthContext";
 import Navbar from "../components/common/Navbar";
 import { getPatients } from "../services/patientService";
 
 export default function Reminders() {
 
+  const { user } = useAuth();
+
   const [patients, setPatients] = useState([]);
 
   const fetchPatients = async () => {
 
+    if (!user) return;
+
     try {
 
-      const data = await getPatients();
+      const data = await getPatients(user.uid);
 
       setPatients(data);
 
@@ -29,7 +34,7 @@ export default function Reminders() {
 
     fetchPatients();
 
-  }, []);
+  }, [user]);
 
   // helper to normalize dates to midnight for accurate comparisons
   const normalizeDate = (date) => {

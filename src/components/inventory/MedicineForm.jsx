@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 
 import toast from "react-hot-toast";
 
+import { useAuth } from "../../context/AuthContext";
+
 import {
   addMedicine,
   updateMedicine,
@@ -14,6 +16,8 @@ export default function MedicineForm({
   clearEdit,
 
 }) {
+
+  const { user } = useAuth();
 
   const initialState = {
     medicineName: "",
@@ -70,6 +74,7 @@ export default function MedicineForm({
 
         await addMedicine({
           ...formData,
+          userId: user.uid,
           createdAt: new Date(),
         });
 

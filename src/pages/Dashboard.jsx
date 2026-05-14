@@ -10,7 +10,7 @@ import Navbar from "../components/common/Navbar";
 
 export default function Dashboard() {
 
-  const { user, logout } = useAuth();
+  const { user } = useAuth();
 
   const navigate = useNavigate();
 
@@ -23,65 +23,60 @@ export default function Dashboard() {
 
   useEffect(() => {
 
-    loadStats();
+    const loadStats = async () => {
 
-  }, []);
+      const patients = await getPatients(user.uid);
 
-  const loadStats = async () => {
+      const medicines = await getMedicines(user.uid);
 
-    const patients = await getPatients();
+      const today = new Date();
 
-    const medicines = await getMedicines();
+      const dueVaccinations = patients.filter((p) => {
 
-    const today = new Date();
-
-    const dueVaccinations = patients.filter((p) => {
-
-      if (!p.nextVaccinationDate) return false;
-
-      return (
-        new Date(
-          p.nextVaccinationDate
-        ).toDateString() ===
-        today.toDateString()
-      );
-    });
-
-    const overdueVaccinations =
-      patients.filter((p) => {
-
-        if (!p.nextVaccinationDate)
-          return false;
+        if (!p.nextVaccinationDate) return false;
 
         return (
           new Date(
             p.nextVaccinationDate
-          ) < today
+          ).toDateString() ===
+          today.toDateString()
         );
       });
 
-    const lowStockMedicines =
-      medicines.filter(
-        (m) => Number(m.quantity) < 10
-      );
+      const overdueVaccinations =
+        patients.filter((p) => {
 
-    setStats({
-      patients: patients.length,
-      dueVaccinations:
-        dueVaccinations.length,
-      overdueVaccinations:
-        overdueVaccinations.length,
-      lowStockMedicines:
-        lowStockMedicines.length,
-    });
-  };
+          if (!p.nextVaccinationDate)
+            return false;
 
-  const handleLogout = async () => {
+          return (
+            new Date(
+              p.nextVaccinationDate
+            ) < today
+          );
+        });
 
-    await logout();
+      const lowStockMedicines =
+        medicines.filter(
+          (m) => Number(m.quantity) < 10
+        );
 
-    navigate("/");
-  };
+      setStats({
+        patients: patients.length,
+        dueVaccinations:
+          dueVaccinations.length,
+        overdueVaccinations:
+          overdueVaccinations.length,
+        lowStockMedicines:
+          lowStockMedicines.length,
+      });
+    };
+
+    if (user) {
+      loadStats();
+    }
+
+  }, [user]);
 
   const cards = [
     {

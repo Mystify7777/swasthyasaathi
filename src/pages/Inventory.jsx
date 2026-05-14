@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 
 import toast, { Toaster } from "react-hot-toast";
 
+import { useAuth } from "../context/AuthContext";
 import Navbar from "../components/common/Navbar";
 import MedicineForm from "../components/inventory/MedicineForm";
 import MedicineList from "../components/inventory/MedicineList";
@@ -13,6 +14,8 @@ import {
 
 export default function Inventory() {
 
+  const { user } = useAuth();
+
   const [medicines, setMedicines] =
     useState([]);
 
@@ -23,9 +26,11 @@ export default function Inventory() {
 
   const fetchMedicines = async () => {
 
+    if (!user) return;
+
     try {
 
-      const data = await getMedicines();
+      const data = await getMedicines(user.uid);
 
       setMedicines(data);
 
@@ -41,7 +46,7 @@ export default function Inventory() {
 
     fetchMedicines();
 
-  }, []);
+  }, [user]);
 
   const handleDelete = async (id) => {
 

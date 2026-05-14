@@ -5,6 +5,8 @@ import {
   deleteDoc,
   doc,
   updateDoc,
+  query,
+  where,
 } from "firebase/firestore";
 
 import { db } from "./firebase";
@@ -21,9 +23,16 @@ export const addPatient = async (patientData) => {
   return response;
 };
 
-export const getPatients = async () => {
+export const getPatients = async (
+  userId
+) => {
 
-  const snapshot = await getDocs(patientsRef);
+  const q = query(
+    patientsRef,
+    where("userId", "==", userId)
+  );
+
+  const snapshot = await getDocs(q);
 
   return snapshot.docs.map((doc) => ({
     id: doc.id,

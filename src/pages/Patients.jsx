@@ -16,6 +16,9 @@ export default function Patients() {
 
   const [search, setSearch] = useState("");
 
+  const [editingPatient, setEditingPatient] =
+    useState(null);
+
   const fetchPatients = async () => {
 
     try {
@@ -64,9 +67,17 @@ export default function Patients() {
 
   const handleEdit = (patient) => {
 
-    console.log("Edit patient:", patient);
+    setEditingPatient(patient);
 
-    toast("Edit feature coming next");
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  };
+
+  const clearEdit = () => {
+
+    setEditingPatient(null);
   };
 
   const filteredPatients = patients.filter((patient) =>
@@ -100,7 +111,11 @@ export default function Patients() {
 
           </div>
 
-          <PatientForm refreshPatients={fetchPatients} />
+          <PatientForm
+            refreshPatients={fetchPatients}
+            editingPatient={editingPatient}
+            clearEdit={clearEdit}
+          />
 
           <PatientList
             patients={filteredPatients}

@@ -1,10 +1,19 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import toast from "react-hot-toast";
 
-import { addPatient } from "../../services/patientService";
+import {
+  addPatient,
+  updatePatient,
+} from "../../services/patientService";
 
-export default function PatientForm({ refreshPatients }) {
+export default function PatientForm({
+
+  refreshPatients,
+  editingPatient,
+  clearEdit,
+
+}) {
 
   const initialState = {
     name: "",
@@ -20,13 +29,25 @@ export default function PatientForm({ refreshPatients }) {
 
   const [loading, setLoading] = useState(false);
 
+  useEffect(() => {
+
+    if (editingPatient) {
+      setFormData(editingPatient);
+    } else {
+      setFormData(initialState);
+    }
+
+  }, [editingPatient]);
+
   const handleChange = (e) => {
 
     const { name, value, type, checked } = e.target;
 
     setFormData((prev) => ({
       ...prev,
-      [name]: type === "checkbox" ? checked : value,
+      [name]: type === "checkbox"
+        ? checked
+        : value,
     }));
   };
 
@@ -38,12 +59,26 @@ export default function PatientForm({ refreshPatients }) {
 
       setLoading(true);
 
-      await addPatient({
-        ...formData,
-        createdAt: new Date(),
-      });
+      if (editingPatient) {
 
-      toast.success("Patient added successfully");
+        await updatePatient(
+          editingPatient.id,
+          formData
+        );
+
+        toast.success("Patient updated");
+
+        clearEdit();
+
+      } else {
+
+        await addPatient({
+          ...formData,
+          createdAt: new Date(),
+        });
+
+        toast.success("Patient added");
+      }
 
       setFormData(initialState);
 
@@ -53,7 +88,7 @@ export default function PatientForm({ refreshPatients }) {
 
       console.error(error);
 
-      toast.error("Failed to add patient");
+      toast.error("Operation failed");
 
     } finally {
 
@@ -68,9 +103,29 @@ export default function PatientForm({ refreshPatients }) {
       className="bg-white p-6 rounded-2xl shadow-md space-y-4"
     >
 
-      <h2 className="text-2xl font-bold text-blue-700">
-        Add Patient
-      </h2>
+      <div className="flex items-center justify-between">
+
+        <h2 className="text-2xl font-bold text-blue-700">
+
+          {editingPatient
+            ? "Edit Patient"
+            : "Add Patient"}
+
+        </h2>
+
+        {editingPatient && (
+
+          <button
+            type="button"
+            onClick={clearEdit}
+            className="text-red-500 font-medium"
+          >
+            Cancel
+          </button>
+
+        )}
+
+      </div>
 
       <input
         type="text"
@@ -136,9 +191,13 @@ export default function PatientForm({ refreshPatients }) {
       <button
         type="submit"
         disabled={loading}
-        className="w-full bg-blue-700 text-white py-3 rounded-lg hover:bg-blue-800 transition"
+        className="w-full bg-blue-700 text-white py-3 rounded-lg"
       >
-        {loading ? "Saving..." : "Add Patient"}
+        {loading
+          ? "Saving..."
+          : editingPatient
+          ? "Update Patient"
+          : "Add Patient"}
       </button>
 
     </form>

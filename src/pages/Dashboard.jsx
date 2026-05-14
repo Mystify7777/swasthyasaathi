@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
 import { getPatients } from "../services/patientService";
+import { getMedicines } from "../services/inventoryService";
 
 export default function Dashboard() {
 
@@ -16,7 +17,7 @@ export default function Dashboard() {
     patients: 0,
     dueVaccinations: 0,
     overdueVaccinations: 0,
-    lowStockMedicines: 5,
+    lowStockMedicines: 0,
   });
 
   useEffect(() => {
@@ -28,6 +29,8 @@ export default function Dashboard() {
   const loadStats = async () => {
 
     const patients = await getPatients();
+
+    const medicines = await getMedicines();
 
     const today = new Date();
 
@@ -43,21 +46,32 @@ export default function Dashboard() {
       );
     });
 
-    const overdueVaccinations = patients.filter((p) => {
+    const overdueVaccinations =
+      patients.filter((p) => {
 
-      if (!p.nextVaccinationDate) return false;
+        if (!p.nextVaccinationDate)
+          return false;
 
-      return (
-        new Date(p.nextVaccinationDate)
-        < today
+        return (
+          new Date(
+            p.nextVaccinationDate
+          ) < today
+        );
+      });
+
+    const lowStockMedicines =
+      medicines.filter(
+        (m) => Number(m.quantity) < 10
       );
-    });
 
     setStats({
       patients: patients.length,
-      dueVaccinations: dueVaccinations.length,
+      dueVaccinations:
+        dueVaccinations.length,
       overdueVaccinations:
         overdueVaccinations.length,
+      lowStockMedicines:
+        lowStockMedicines.length,
     });
   };
 

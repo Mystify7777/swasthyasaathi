@@ -1,5 +1,6 @@
 import {
   signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
   setPersistence,
   browserLocalPersistence,
 } from "firebase/auth";
@@ -11,6 +12,19 @@ export const loginUser = async (email, password) => {
   await setPersistence(auth, browserLocalPersistence);
 
   const userCredential = await signInWithEmailAndPassword(
+    auth,
+    email,
+    password
+  );
+
+  return userCredential.user;
+};
+
+export const registerUser = async (email, password) => {
+
+  await setPersistence(auth, browserLocalPersistence);
+
+  const userCredential = await createUserWithEmailAndPassword(
     auth,
     email,
     password

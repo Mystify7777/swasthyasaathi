@@ -1,13 +1,116 @@
+import { useEffect, useState } from "react";
+
+import toast, { Toaster } from "react-hot-toast";
+
+import PatientForm from "../components/patients/PatientForm";
+import PatientList from "../components/patients/PatientList";
+
+import {
+  getPatients,
+  deletePatient,
+} from "../services/patientService";
+
 export default function Patients() {
+
+  const [patients, setPatients] = useState([]);
+
+  const [search, setSearch] = useState("");
+
+  const fetchPatients = async () => {
+
+    try {
+
+      const data = await getPatients();
+
+      setPatients(data);
+
+    } catch (error) {
+
+      console.error(error);
+
+      toast.error("Failed to fetch patients");
+    }
+  };
+
+  useEffect(() => {
+
+    fetchPatients();
+
+  }, []);
+
+  const handleDelete = async (id) => {
+
+    const confirmDelete = window.confirm(
+      "Delete this patient?"
+    );
+
+    if (!confirmDelete) return;
+
+    try {
+
+      await deletePatient(id);
+
+      toast.success("Patient deleted");
+
+      fetchPatients();
+
+    } catch (error) {
+
+      console.error(error);
+
+      toast.error("Delete failed");
+    }
+  };
+
+  const handleEdit = (patient) => {
+
+    console.log("Edit patient:", patient);
+
+    toast("Edit feature coming next");
+  };
+
+  const filteredPatients = patients.filter((patient) =>
+    patient.name.toLowerCase().includes(
+      search.toLowerCase()
+    )
+  );
 
   return (
 
-    <div className="min-h-screen bg-gray-100 p-6">
+    <>
+      <Toaster />
 
-      <h1 className="text-3xl font-bold text-blue-700 mb-6">
-        Patients
-      </h1>
+      <div className="min-h-screen bg-gray-100 p-6">
 
-    </div>
+        <div className="max-w-7xl mx-auto space-y-8">
+
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+
+            <h1 className="text-3xl font-bold text-blue-700">
+              Patients
+            </h1>
+
+            <input
+              type="text"
+              placeholder="Search patients..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="border border-gray-300 rounded-lg px-4 py-3 w-full md:w-80"
+            />
+
+          </div>
+
+          <PatientForm refreshPatients={fetchPatients} />
+
+          <PatientList
+            patients={filteredPatients}
+            onDelete={handleDelete}
+            onEdit={handleEdit}
+          />
+
+        </div>
+
+      </div>
+    </>
   );
 }

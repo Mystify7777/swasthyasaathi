@@ -7,6 +7,7 @@ import toast, { Toaster } from "react-hot-toast";
 import {
   loginUser,
   registerUser,
+  resetPassword,
 } from "../services/authService";
 
 export default function Login() {
@@ -84,6 +85,32 @@ export default function Login() {
       setLoading(false);
     }
   };
+
+  const handleForgotPassword =
+    async () => {
+
+      if (!email) {
+
+        toast.error(
+          "Enter your email first"
+        );
+
+        return;
+      }
+
+      try {
+
+        await resetPassword(email);
+
+        toast.success(
+          "Password reset email sent"
+        );
+
+      } catch (error) {
+
+        toast.error(error.message);
+      }
+    };
 
   return (
 
@@ -172,6 +199,18 @@ export default function Login() {
               </div>
 
             )}
+
+            <div className="text-right">
+
+              <button
+                type="button"
+                onClick={handleForgotPassword}
+                className="text-sm text-blue-700 hover:underline"
+              >
+                Forgot Password?
+              </button>
+
+            </div>
 
             <button
               type="submit"

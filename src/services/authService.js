@@ -3,6 +3,7 @@ import {
   createUserWithEmailAndPassword,
   setPersistence,
   browserLocalPersistence,
+  sendPasswordResetEmail,
 } from "firebase/auth";
 
 import { auth } from "./firebase";
@@ -31,4 +32,14 @@ export const registerUser = async (email, password) => {
   );
 
   return userCredential.user;
+};
+
+export const resetPassword = async (
+  email
+) => {
+
+  return await sendPasswordResetEmail(
+    auth,
+    email
+  );
 };

@@ -23,7 +23,6 @@ export default function PatientForm({
     village: "",
     phone: "",
     pregnancyStatus: false,
-    vaccinationStatus: "Pending",
     nextVaccinationDate: "",
   };
 

@@ -1,3 +1,7 @@
+import {
+  getVaccinationStatus,
+} from "../../utils/dateUtils";
+
 export default function PatientCard({
 
   patient,
@@ -5,6 +9,10 @@ export default function PatientCard({
   onEdit,
 
 }) {
+
+  const status = getVaccinationStatus(
+    patient.nextVaccinationDate
+  );
 
   return (
 
@@ -16,8 +24,16 @@ export default function PatientCard({
           {patient.name}
         </h3>
 
-        <span className="text-sm bg-yellow-100 text-yellow-700 px-3 py-1 rounded-full">
-          {patient.vaccinationStatus}
+        <span
+          className={`text-sm px-3 py-1 rounded-full font-medium ${
+            status === "Overdue"
+              ? "bg-red-100 text-red-700"
+              : status === "Due Today"
+              ? "bg-yellow-100 text-yellow-700"
+              : "bg-green-100 text-green-700"
+          }`}
+        >
+          {status}
         </span>
 
       </div>

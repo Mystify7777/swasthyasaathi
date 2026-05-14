@@ -23,9 +23,10 @@ const cards = [
     path: "/patients",
   },
   {
-    title: "Vaccinations Due",
+    title: "Vaccination Reminders",
     value: "18",
     color: "bg-yellow-500",
+    path: "/reminders",
   },
   {
     title: "Low Stock Medicines",

@@ -61,8 +61,15 @@ export default function PatientForm({
 
     try {
 
+      const sanitizedData = {
+        ...formData,
+        name: formData.name.trim(),
+        village: formData.village.trim(),
+        phone: formData.phone.trim(),
+      };
+
       const validationError =
-        validatePatient(formData);
+        validatePatient(sanitizedData);
 
       if (validationError) {
 
@@ -77,7 +84,7 @@ export default function PatientForm({
 
         await updatePatient(
           editingPatient.id,
-          formData
+          sanitizedData
         );
 
         toast.success("Patient updated");
@@ -87,7 +94,7 @@ export default function PatientForm({
       } else {
 
         await addPatient({
-          ...formData,
+          ...sanitizedData,
           createdAt: new Date(),
         });
 

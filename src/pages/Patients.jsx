@@ -4,6 +4,7 @@ import toast, { Toaster } from "react-hot-toast";
 
 import PatientForm from "../components/patients/PatientForm";
 import PatientList from "../components/patients/PatientList";
+import Navbar from "../components/common/Navbar";
 
 import {
   getPatients,
@@ -89,6 +90,7 @@ export default function Patients() {
   return (
 
     <>
+      <Navbar />
       <Toaster />
 
       <div className="min-h-screen bg-gray-100 p-6">

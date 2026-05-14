@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 
 import toast, { Toaster } from "react-hot-toast";
 
+import Navbar from "../components/common/Navbar";
 import { getPatients } from "../services/patientService";
 
 export default function Reminders() {
@@ -114,6 +115,7 @@ export default function Reminders() {
   return (
 
     <>
+      <Navbar />
       <Toaster />
 
       <div className="min-h-screen bg-gray-100 p-6">

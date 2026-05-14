@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 
 import toast, { Toaster } from "react-hot-toast";
 
+import Navbar from "../components/common/Navbar";
 import MedicineForm from "../components/inventory/MedicineForm";
 import MedicineList from "../components/inventory/MedicineList";
 
@@ -103,6 +104,7 @@ export default function Inventory() {
   return (
 
     <>
+      <Navbar />
       <Toaster />
 
       <div className="min-h-screen bg-gray-100 p-6">

@@ -6,6 +6,7 @@ import { useAuth } from "../context/AuthContext";
 
 import { getPatients } from "../services/patientService";
 import { getMedicines } from "../services/inventoryService";
+import Navbar from "../components/common/Navbar";
 
 export default function Dashboard() {
 
@@ -113,28 +114,7 @@ export default function Dashboard() {
 
     <div className="min-h-screen bg-gray-100">
 
-      <header className="bg-white shadow-sm px-6 py-4 flex items-center justify-between">
-
-        <div>
-
-          <h1 className="text-2xl font-bold text-blue-700">
-            SwasthyaSaathi
-          </h1>
-
-          <p className="text-gray-500 text-sm">
-            Welcome, {user?.email}
-          </p>
-
-        </div>
-
-        <button
-          onClick={handleLogout}
-          className="bg-red-500 text-white px-4 py-2 rounded-lg"
-        >
-          Logout
-        </button>
-
-      </header>
+      <Navbar />
 
       <main className="p-6">
 

@@ -5,6 +5,7 @@ import Dashboard from "../pages/Dashboard";
 import NotFound from "../pages/NotFound";
 import Patients from "../pages/Patients";
 import Reminders from "../pages/Reminders";
+import Inventory from "../pages/Inventory";
 
 import ProtectedRoute from "./ProtectedRoute";
 
@@ -45,6 +46,15 @@ export default function AppRoutes() {
         />
 
         <Route path="*" element={<NotFound />} />
+
+        <Route
+  path="/inventory"
+  element={
+    <ProtectedRoute>
+      <Inventory />
+    </ProtectedRoute>
+  }
+/>
 
       </Routes>
 

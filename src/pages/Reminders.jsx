@@ -30,19 +30,31 @@ export default function Reminders() {
 
   }, []);
 
+  // helper to normalize dates to midnight for accurate comparisons
+  const normalizeDate = (date) => {
+
+    const d = new Date(date);
+
+    d.setHours(0, 0, 0, 0);
+
+    return d;
+  };
+
   const today = new Date();
 
   const dueToday = patients.filter((patient) => {
 
     if (!patient.nextVaccinationDate) return false;
 
-    const vaccineDate = new Date(
+    const vaccineDate = normalizeDate(
       patient.nextVaccinationDate
     );
 
+    const currentDate = normalizeDate(today);
+
     return (
-      vaccineDate.toDateString() ===
-      today.toDateString()
+      vaccineDate.getTime() ===
+      currentDate.getTime()
     );
   });
 
@@ -50,22 +62,26 @@ export default function Reminders() {
 
     if (!patient.nextVaccinationDate) return false;
 
-    const vaccineDate = new Date(
+    const vaccineDate = normalizeDate(
       patient.nextVaccinationDate
     );
 
-    return vaccineDate < today;
+    const currentDate = normalizeDate(today);
+
+    return vaccineDate < currentDate;
   });
 
   const upcoming = patients.filter((patient) => {
 
     if (!patient.nextVaccinationDate) return false;
 
-    const vaccineDate = new Date(
+    const vaccineDate = normalizeDate(
       patient.nextVaccinationDate
     );
 
-    return vaccineDate > today;
+    const currentDate = normalizeDate(today);
+
+    return vaccineDate > currentDate;
   });
 
   const renderPatientCard = (patient, color) => (
@@ -107,6 +123,46 @@ export default function Reminders() {
           <h1 className="text-3xl font-bold text-blue-700">
             Vaccination Reminders
           </h1>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+            <div className="bg-red-500 text-white p-5 rounded-2xl shadow-md">
+
+              <h3 className="text-lg font-semibold">
+                Overdue
+              </h3>
+
+              <p className="text-4xl font-bold mt-3">
+                {overdue.length}
+              </p>
+
+            </div>
+
+            <div className="bg-yellow-500 text-white p-5 rounded-2xl shadow-md">
+
+              <h3 className="text-lg font-semibold">
+                Due Today
+              </h3>
+
+              <p className="text-4xl font-bold mt-3">
+                {dueToday.length}
+              </p>
+
+            </div>
+
+            <div className="bg-green-500 text-white p-5 rounded-2xl shadow-md">
+
+              <h3 className="text-lg font-semibold">
+                Upcoming
+              </h3>
+
+              <p className="text-4xl font-bold mt-3">
+                {upcoming.length}
+              </p>
+
+            </div>
+
+          </div>
 
           <section>
 

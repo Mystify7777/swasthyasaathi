@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 
 import toast from "react-hot-toast";
 
+import { validatePatient } from "../../utils/validators";
+
 import {
   addPatient,
   updatePatient,
@@ -47,6 +49,8 @@ export default function PatientForm({
       ...prev,
       [name]: type === "checkbox"
         ? checked
+        : typeof value === "string"
+        ? value.trimStart()
         : value,
     }));
   };
@@ -56,6 +60,16 @@ export default function PatientForm({
     e.preventDefault();
 
     try {
+
+      const validationError =
+        validatePatient(formData);
+
+      if (validationError) {
+
+        toast.error(validationError);
+
+        return;
+      }
 
       setLoading(true);
 
@@ -129,6 +143,7 @@ export default function PatientForm({
 
       <input
         type="text"
+        maxLength={50}
         name="name"
         placeholder="Patient Name"
         value={formData.name}
@@ -144,6 +159,8 @@ export default function PatientForm({
         value={formData.age}
         onChange={handleChange}
         required
+        min="0"
+        max="120"
         className="w-full border border-gray-300 rounded-lg px-4 py-3"
       />
 
@@ -158,12 +175,14 @@ export default function PatientForm({
       />
 
       <input
-        type="text"
+        type="tel"
+        inputMode="numeric"
         name="phone"
         placeholder="Phone Number"
         value={formData.phone}
         onChange={handleChange}
         required
+        maxLength={10}
         className="w-full border border-gray-300 rounded-lg px-4 py-3"
       />
 

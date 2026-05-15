@@ -214,7 +214,7 @@ export default function PatientForm({
           onChange={handleChange}
         />
 
-        Pregnant
+        Patient is pregnant
 
       </label>
 

@@ -14,27 +14,38 @@ export default function PatientCard({
     patient.nextVaccinationDate
   );
 
+  const statusClasses =
+    status === "Overdue"
+      ? "bg-red-100 text-red-700"
+      : status === "Due Today"
+      ? "bg-yellow-100 text-yellow-700"
+      : "bg-green-100 text-green-700";
+
   return (
 
     <div className="bg-white rounded-2xl shadow-md p-5 space-y-3">
 
-      <div className="flex items-center justify-between">
+      <div className="flex items-start justify-between gap-3">
 
         <h3 className="text-xl font-bold text-blue-700">
           {patient.name}
         </h3>
 
-        <span
-          className={`text-sm px-3 py-1 rounded-full font-medium ${
-            status === "Overdue"
-              ? "bg-red-100 text-red-700"
-              : status === "Due Today"
-              ? "bg-yellow-100 text-yellow-700"
-              : "bg-green-100 text-green-700"
-          }`}
-        >
-          {status}
-        </span>
+        <div className="flex gap-2 flex-wrap justify-end">
+
+          {patient.pregnant && (
+
+            <span className="bg-pink-100 text-pink-700 px-3 py-1 rounded-full text-sm font-medium">
+              Pregnant
+            </span>
+
+          )}
+
+          <span className={`text-sm px-3 py-1 rounded-full font-medium ${statusClasses}`}>
+            {status}
+          </span>
+
+        </div>
 
       </div>
 

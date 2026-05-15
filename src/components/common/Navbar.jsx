@@ -1,6 +1,7 @@
 import { NavLink, useNavigate } from "react-router-dom";
 
 import { useAuth } from "../../context/AuthContext";
+import InstallPrompt from "./InstallPrompt";
 
 export default function Navbar() {
 
@@ -61,6 +62,8 @@ export default function Navbar() {
           </NavLink>
 
         ))}
+
+        <InstallPrompt />
 
         <button
           onClick={handleLogout}

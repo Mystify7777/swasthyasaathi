@@ -14,6 +14,9 @@ export default function PatientCard({
     patient.nextVaccinationDate
   );
 
+  const isPregnant =
+    Boolean(patient.pregnant ?? patient.pregnancyStatus);
+
   const statusClasses =
     status === "Overdue"
       ? "bg-red-100 text-red-700"
@@ -33,7 +36,7 @@ export default function PatientCard({
 
         <div className="flex gap-2 flex-wrap justify-end">
 
-          {patient.pregnant && (
+          {isPregnant && (
 
             <span className="bg-pink-100 text-pink-700 px-3 py-1 rounded-full text-sm font-medium">
               Pregnant

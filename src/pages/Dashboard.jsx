@@ -35,6 +35,28 @@ export default function Dashboard() {
     refreshMedicines,
   ]);
 
+  useEffect(() => {
+
+    const preloadRoutes = () => {
+      import("./Patients");
+      import("./Inventory");
+    };
+
+    const runOnIdle = () => {
+
+      if ("requestIdleCallback" in window) {
+        window.requestIdleCallback(preloadRoutes);
+      } else {
+        preloadRoutes();
+      }
+    };
+
+    const timeoutId = setTimeout(runOnIdle, 2000);
+
+    return () => clearTimeout(timeoutId);
+
+  }, []);
+
   const today = new Date();
 
   const dueVaccinations = patients.filter((p) => {

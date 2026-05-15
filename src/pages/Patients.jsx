@@ -6,6 +6,7 @@ import { useData } from "../context/useData";
 import PatientForm from "../components/patients/PatientForm";
 import PatientList from "../components/patients/PatientList";
 import Navbar from "../components/common/Navbar";
+import ConfirmModal from "../components/common/ConfirmModal";
 
 import {
   deletePatient,
@@ -24,6 +25,12 @@ export default function Patients() {
   const [editingPatient, setEditingPatient] =
     useState(null);
 
+  const [showDeleteModal, setShowDeleteModal] =
+    useState(false);
+
+  const [selectedPatient, setSelectedPatient] =
+    useState(null);
+
   useEffect(() => {
 
     if (patients.length === 0) {
@@ -32,28 +39,50 @@ export default function Patients() {
 
   }, []);
 
-  const handleDelete = async (id) => {
+  const handleDeleteClick =
+    (patient) => {
 
-    const confirmDelete = window.confirm(
-      "Delete this patient?"
-    );
+      setSelectedPatient(patient);
 
-    if (!confirmDelete) return;
+      setShowDeleteModal(true);
+    };
 
-    try {
+  const confirmDelete =
+    async () => {
 
-      await deletePatient(id);
+      if (!selectedPatient) return;
 
-      toast.success("Patient deleted");
+      try {
 
-      refreshPatients();
+        await deletePatient(
+          selectedPatient.id
+        );
 
-    } catch (error) {
+        toast.success(
+          "Patient deleted successfully"
+        );
 
-      console.error(error);
+        refreshPatients();
 
-      toast.error("Delete failed");
-    }
+      } catch (error) {
+
+        toast.error(
+          "Failed to delete patient"
+        );
+
+      } finally {
+
+        setShowDeleteModal(false);
+
+        setSelectedPatient(null);
+      }
+    };
+
+  const cancelDelete = () => {
+
+    setShowDeleteModal(false);
+
+    setSelectedPatient(null);
   };
 
   const handleEdit = (patient) => {
@@ -112,7 +141,7 @@ export default function Patients() {
           <PatientList
             patients={filteredPatients}
             loading={loading}
-            onDelete={handleDelete}
+            onDelete={handleDeleteClick}
             onEdit={handleEdit}
             searchQuery={search}
           />
@@ -120,6 +149,15 @@ export default function Patients() {
         </div>
 
       </div>
+
+      <ConfirmModal
+        isOpen={showDeleteModal}
+        title="Delete Patient?"
+        message={`This will permanently remove ${selectedPatient?.name || "this patient"} and related follow-up data from your list.`}
+        onConfirm={confirmDelete}
+        onCancel={cancelDelete}
+      />
+
     </>
   );
 }

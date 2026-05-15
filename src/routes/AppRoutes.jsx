@@ -5,7 +5,7 @@ import {
 
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
-import AppLoader from "../components/common/AppLoader";
+import PageLoader from "../components/common/PageLoader";
 
 const Dashboard = lazy(() =>
   import("../pages/Dashboard")
@@ -37,7 +37,7 @@ export default function AppRoutes() {
 
     <BrowserRouter>
 
-      <Suspense fallback={<AppLoader />}>
+      <Suspense fallback={<PageLoader />}>
 
         <Routes>
 

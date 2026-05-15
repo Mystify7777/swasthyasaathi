@@ -83,7 +83,7 @@ export default function PatientCard({
         </button>
 
         <button
-          onClick={() => onDelete(patient.id)}
+          onClick={() => onDelete(patient)}
           className="flex-1 bg-red-500 text-white py-2 rounded-lg"
         >
           Delete

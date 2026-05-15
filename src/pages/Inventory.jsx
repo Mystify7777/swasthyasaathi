@@ -6,6 +6,7 @@ import { useData } from "../context/useData";
 import Navbar from "../components/common/Navbar";
 import MedicineForm from "../components/inventory/MedicineForm";
 import MedicineList from "../components/inventory/MedicineList";
+import ConfirmModal from "../components/common/ConfirmModal";
 
 import {
   deleteMedicine,
@@ -24,6 +25,12 @@ export default function Inventory() {
 
   const [search, setSearch] = useState("");
 
+  const [showDeleteModal, setShowDeleteModal] =
+    useState(false);
+
+  const [selectedMedicine, setSelectedMedicine] =
+    useState(null);
+
   useEffect(() => {
 
     if (medicines.length === 0) {
@@ -32,21 +39,32 @@ export default function Inventory() {
 
   }, []);
 
-  const handleDelete = async (id) => {
+  const handleDelete = (id) => {
 
-    const confirmDelete = window.confirm(
-      "Delete this medicine?"
+    const medicine = medicines.find((m) => m.id === id);
+
+    setSelectedMedicine(
+      medicine || { id }
     );
 
-    if (!confirmDelete) return;
+    setShowDeleteModal(true);
+  };
+
+  const confirmDelete = async () => {
+
+    if (!selectedMedicine) return;
 
     try {
 
-      await deleteMedicine(id);
+      await deleteMedicine(selectedMedicine.id);
 
       toast.success("Medicine deleted");
 
       refreshMedicines();
+
+      setShowDeleteModal(false);
+
+      setSelectedMedicine(null);
 
     } catch (error) {
 
@@ -54,6 +72,13 @@ export default function Inventory() {
 
       toast.error("Delete failed");
     }
+  };
+
+  const cancelDelete = () => {
+
+    setShowDeleteModal(false);
+
+    setSelectedMedicine(null);
   };
 
   const handleEdit = (medicine) => {
@@ -163,6 +188,15 @@ export default function Inventory() {
         </div>
 
       </div>
+
+      <ConfirmModal
+        isOpen={showDeleteModal}
+        title="Delete Medicine?"
+        message={`This will permanently remove ${selectedMedicine?.medicineName || "this medicine"} from your inventory.`}
+        onConfirm={confirmDelete}
+        onCancel={cancelDelete}
+      />
+
     </>
   );
 }

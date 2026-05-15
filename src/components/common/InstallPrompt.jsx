@@ -15,7 +15,11 @@ export default function InstallPrompt() {
 
   useEffect(() => {
 
+    console.log("InstallPrompt mounted, checking PWA support...");
+
     const handler = (e) => {
+
+      console.log("beforeinstallprompt event fired");
 
       e.preventDefault();
 
@@ -31,11 +35,32 @@ export default function InstallPrompt() {
       "appinstalled",
       () => {
 
+        console.log("App installed");
+
         setIsInstalled(true);
 
         setDeferredPrompt(null);
       }
     );
+
+    // Check if service worker is registered
+    if ("serviceWorker" in navigator) {
+
+      navigator.serviceWorker
+        .getRegistrations()
+        .then((registrations) => {
+
+          console.log(`Service workers registered: ${registrations.length}`);
+
+          registrations.forEach((reg) => {
+
+            console.log("SW scope:", reg.scope);
+          });
+        });
+    } else {
+
+      console.log("Service Worker not supported");
+    }
 
     return () => {
 

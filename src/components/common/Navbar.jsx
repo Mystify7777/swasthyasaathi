@@ -2,6 +2,7 @@ import { NavLink, useNavigate } from "react-router-dom";
 
 import { useAuth } from "../../context/AuthContext";
 import InstallPrompt from "./InstallPrompt";
+import SyncStatus from "./SyncStatus";
 
 export default function Navbar() {
 
@@ -37,15 +38,23 @@ export default function Navbar() {
 
   return (
 
-    <nav className="bg-white shadow-sm px-6 py-4 flex flex-wrap items-center justify-between gap-4">
+    <nav className="bg-white shadow-sm px-6 py-4">
 
-      <h1 className="text-2xl font-bold text-blue-700">
-        SwasthyaSaathi
-      </h1>
+      <div className="flex flex-wrap items-center justify-between gap-4 mb-2">
 
-      <div className="flex flex-wrap items-center gap-3">
+        <div>
 
-        {navItems.map((item) => (
+          <h1 className="text-2xl font-bold text-blue-700">
+            SwasthyaSaathi
+          </h1>
+
+          <SyncStatus />
+
+        </div>
+
+        <div className="flex flex-wrap items-center gap-3">
+
+          {navItems.map((item) => (
 
           <NavLink
             key={item.path}
@@ -73,6 +82,8 @@ export default function Navbar() {
         </button>
 
       </div>
+
+    </div>
 
     </nav>
   );

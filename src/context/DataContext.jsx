@@ -34,6 +34,12 @@ export const DataProvider = ({
   const [initialLoading, setInitialLoading] =
     useState(true);
 
+  const [refreshing, setRefreshing] =
+    useState(false);
+
+  const [lastSynced, setLastSynced] =
+    useState(null);
+
   const refreshPatients =
     async () => {
 
@@ -83,15 +89,19 @@ export const DataProvider = ({
     try {
 
       setInitialLoading(true);
+      setRefreshing(true);
 
       await Promise.all([
         refreshPatients(),
         refreshMedicines(),
       ]);
 
+      setLastSynced(new Date());
+
     } finally {
 
       setInitialLoading(false);
+      setRefreshing(false);
     }
   };
 
@@ -125,6 +135,8 @@ export const DataProvider = ({
         refreshPatients,
         refreshMedicines,
         refreshAll,
+        refreshing,
+        lastSynced,
 
       }}
     >

@@ -1,6 +1,7 @@
 import { NavLink, useNavigate } from "react-router-dom";
 
 import { useAuth } from "../../context/AuthContext";
+import DataStatusBanner from "./DataStatusBanner";
 import InstallPrompt from "./InstallPrompt";
 import SyncStatus from "./SyncStatus";
 
@@ -37,6 +38,8 @@ export default function Navbar() {
   ];
 
   return (
+
+    <>
 
     <nav className="bg-white shadow-sm px-6 py-4">
 
@@ -86,5 +89,9 @@ export default function Navbar() {
     </div>
 
     </nav>
+
+    <DataStatusBanner />
+
+    </>
   );
 }

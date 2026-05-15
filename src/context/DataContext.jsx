@@ -1,13 +1,12 @@
 import {
 
-  createContext,
-  useContext,
   useEffect,
   useState,
 
 } from "react";
 
 import { useAuth } from "./AuthContext";
+import DataContext from "./dataContext";
 
 import {
   getPatients,
@@ -16,9 +15,6 @@ import {
 import {
   getMedicines,
 } from "../services/inventoryService";
-
-const DataContext = createContext();
-
 export const DataProvider = ({
   children,
 }) => {
@@ -40,6 +36,12 @@ export const DataProvider = ({
   const [lastSynced, setLastSynced] =
     useState(null);
 
+  const [errors, setErrors] =
+    useState({
+      patients: null,
+      medicines: null,
+    });
+
   const refreshPatients =
     async () => {
 
@@ -52,13 +54,20 @@ export const DataProvider = ({
 
         setPatients(data);
         setLastSynced(new Date());
+        setErrors((prev) => ({
+          ...prev,
+          patients: null,
+        }));
 
       } catch (error) {
 
-        console.error(
-          "Failed to load patients",
-          error
-        );
+        setErrors((prev) => ({
+          ...prev,
+          patients:
+            "Unable to sync patient data. Showing cached data if available.",
+        }));
+
+        console.error(error);
       }
     };
 
@@ -74,13 +83,20 @@ export const DataProvider = ({
 
         setMedicines(data);
         setLastSynced(new Date());
+        setErrors((prev) => ({
+          ...prev,
+          medicines: null,
+        }));
 
       } catch (error) {
 
-        console.error(
-          "Failed to load medicines",
-          error
-        );
+        setErrors((prev) => ({
+          ...prev,
+          medicines:
+            "Unable to sync medicine data. Showing cached data if available.",
+        }));
+
+        console.error(error);
       }
     };
 
@@ -108,19 +124,29 @@ export const DataProvider = ({
   };
 
   useEffect(() => {
+    const timeoutId = setTimeout(() => {
 
-    if (user) {
+      if (user) {
 
-      setInitialLoading(false);
+        setInitialLoading(false);
 
-    } else {
+      } else {
 
-      setPatients([]);
+        setPatients([]);
 
-      setMedicines([]);
+        setMedicines([]);
 
-      setInitialLoading(false);
-    }
+        setErrors({
+          patients: null,
+          medicines: null,
+        });
+
+        setInitialLoading(false);
+      }
+
+    }, 0);
+
+    return () => clearTimeout(timeoutId);
 
   }, [user]);
 
@@ -139,6 +165,7 @@ export const DataProvider = ({
         refreshAll,
         refreshing,
         lastSynced,
+        errors,
 
       }}
     >
@@ -148,6 +175,3 @@ export const DataProvider = ({
     </DataContext.Provider>
   );
 };
-
-export const useData = () =>
-  useContext(DataContext);

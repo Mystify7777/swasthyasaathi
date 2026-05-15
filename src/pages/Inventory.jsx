@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 
 import toast, { Toaster } from "react-hot-toast";
 
-import { useData } from "../context/DataContext";
+import { useData } from "../context/useData";
 import Navbar from "../components/common/Navbar";
 import MedicineForm from "../components/inventory/MedicineForm";
 import MedicineList from "../components/inventory/MedicineList";

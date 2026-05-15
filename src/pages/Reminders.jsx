@@ -1,4 +1,4 @@
-import { useData } from "../context/DataContext";
+import { useData } from "../context/useData";
 
 import toast, { Toaster } from "react-hot-toast";
 

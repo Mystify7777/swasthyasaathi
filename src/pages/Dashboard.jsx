@@ -2,7 +2,7 @@ import { useEffect } from "react";
 
 import { useNavigate } from "react-router-dom";
 
-import { useData } from "../context/DataContext";
+import { useData } from "../context/useData";
 import Navbar from "../components/common/Navbar";
 import DashboardSkeleton from "../components/skeletons/DashboardSkeleton";
 

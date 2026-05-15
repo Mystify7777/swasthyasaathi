@@ -7,6 +7,7 @@ export default function MedicineList({
   loading,
   onDelete,
   onEdit,
+  searchQuery,
 
 }) {
 
@@ -26,45 +27,51 @@ export default function MedicineList({
 
   if (medicines.length === 0) {
 
+    const hasSearchQuery =
+      searchQuery && searchQuery.trim().length > 0;
+
     return (
-    searchQuery,
+
       <div className="bg-white rounded-2xl shadow-md p-10 text-center">
 
         <h2 className="text-2xl font-bold text-purple-700">
-          No Medicines Added Yet
+          {hasSearchQuery
+            ? "No Medicines Matched Your Search"
+            : "No Medicines Added Yet"}
         </h2>
 
         <p className="text-gray-600 mt-3 max-w-md mx-auto">
 
-          Add medicine stock to monitor inventory,
-          expiry dates, and low stock alerts.
+          {hasSearchQuery
+            ? "Try a different keyword or clear the search to see all medicines."
+            : "Add medicine stock to monitor inventory, expiry dates, and low stock alerts."}
 
         </p>
 
-      const hasSearchQuery = searchQuery && searchQuery.trim().length > 0;
         <div className="mt-6 text-5xl">
-          💊
+          {hasSearchQuery ? "🔎" : "💊"}
         </div>
-            {hasSearchQuery
-              ? "No Medicines Matched Your Search"
-              : "No Medicines Added Yet"}
+
+        <p className="text-sm text-gray-400 mt-4">
+          Use the form above to get started.
+        </p>
+
+        {hasSearchQuery && (
+
+          <p className="text-sm text-gray-400 mt-2">
+            Use the search box above to try another medicine.
+          </p>
+
+        )}
+
       </div>
     );
-            {hasSearchQuery
-              ? "Try a different keyword or clear the search to see all medicines."
-              : "Add medicine stock to monitor inventory, expiry dates, and low stock alerts."}
+  }
+
   return (
 
-            {hasSearchQuery ? "🔎" : "💊"}
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 
-          <p className="text-sm text-gray-400 mt-4">
-            Use the form above to get started.
-          </p>
-          {hasSearchQuery && (
-            <p className="text-sm text-gray-400 mt-2">
-              Use the search box above to try another medicine.
-            </p>
-          )}
       {medicines.map((medicine) => (
 
         <MedicineCard

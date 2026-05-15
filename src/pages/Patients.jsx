@@ -114,6 +114,7 @@ export default function Patients() {
             loading={loading}
             onDelete={handleDelete}
             onEdit={handleEdit}
+            searchQuery={search}
           />
 
         </div>

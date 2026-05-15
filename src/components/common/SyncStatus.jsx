@@ -10,7 +10,7 @@ export default function SyncStatus() {
   const formatTime = (date) => {
 
     if (!date) {
-      return "Not synced yet";
+      return "Waiting for first sync...";
     }
 
     return new Intl.DateTimeFormat(

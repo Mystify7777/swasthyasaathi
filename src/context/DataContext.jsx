@@ -51,6 +51,7 @@ export const DataProvider = ({
           await getPatients(user.uid);
 
         setPatients(data);
+        setLastSynced(new Date());
 
       } catch (error) {
 
@@ -72,6 +73,7 @@ export const DataProvider = ({
           await getMedicines(user.uid);
 
         setMedicines(data);
+        setLastSynced(new Date());
 
       } catch (error) {
 

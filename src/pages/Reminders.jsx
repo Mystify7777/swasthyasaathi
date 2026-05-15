@@ -64,6 +64,54 @@ export default function Reminders() {
     return vaccineDate > currentDate;
   });
 
+  if (
+    overdue.length === 0 &&
+    dueToday.length === 0 &&
+    upcoming.length === 0
+  ) {
+
+    return (
+
+      <>
+        <Navbar />
+        <Toaster />
+
+        <div className="min-h-screen bg-gray-100 p-6">
+
+          <div className="max-w-7xl mx-auto">
+
+            <h1 className="text-3xl font-bold text-blue-700 mb-10">
+              Vaccination Reminders
+            </h1>
+
+            <div className="bg-white rounded-2xl shadow-md p-10 text-center">
+
+              <h2 className="text-2xl font-bold text-green-700">
+                No Pending Reminders
+              </h2>
+
+              <p className="text-gray-600 mt-3 max-w-md mx-auto">
+
+                All vaccination schedules are currently up to date.
+
+              </p>
+
+              <div className="mt-6 text-5xl">
+                ✅
+              </div>
+              <p className="text-sm text-gray-400 mt-4">
+                Use the form above to get started.
+              </p>
+
+            </div>
+
+          </div>
+
+        </div>
+      </>
+    );
+  }
+
   const renderPatientCard = (patient, color) => (
 
     <div

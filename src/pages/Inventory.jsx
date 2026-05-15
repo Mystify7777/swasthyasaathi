@@ -157,6 +157,7 @@ export default function Inventory() {
             loading={loading}
             onDelete={handleDelete}
             onEdit={handleEdit}
+            searchQuery={search}
           />
 
         </div>

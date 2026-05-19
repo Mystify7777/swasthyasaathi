@@ -55,9 +55,11 @@ export default function MedicineForm({
 
     e.preventDefault();
 
-    try {
+    if (loading) return;
 
-      setLoading(true);
+    setLoading(true);
+
+    try {
 
       if (editingMedicine) {
 
@@ -160,7 +162,7 @@ export default function MedicineForm({
       <button
         type="submit"
         disabled={loading}
-        className="w-full bg-purple-700 text-white py-3 rounded-lg"
+        className="w-full bg-purple-700 text-white py-3 rounded-lg disabled:opacity-70 disabled:cursor-not-allowed"
       >
         {loading
           ? "Saving..."

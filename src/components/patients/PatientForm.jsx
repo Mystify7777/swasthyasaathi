@@ -62,6 +62,10 @@ export default function PatientForm({
 
     e.preventDefault();
 
+    if (loading) return;
+
+    setLoading(true);
+
     try {
 
       const sanitizedData = {
@@ -78,10 +82,10 @@ export default function PatientForm({
 
         toast.error(validationError);
 
+        setLoading(false);
+
         return;
       }
-
-      setLoading(true);
 
       if (editingPatient) {
 
@@ -221,7 +225,7 @@ export default function PatientForm({
       <button
         type="submit"
         disabled={loading}
-        className="w-full bg-blue-700 text-white py-3 rounded-lg"
+        className="w-full bg-blue-700 text-white py-3 rounded-lg disabled:opacity-70 disabled:cursor-not-allowed"
       >
         {loading
           ? "Saving..."
